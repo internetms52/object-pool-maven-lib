@@ -3,20 +3,19 @@ package com.internetms52.object_pool.scanner;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.internetms52.object_pool.util.LoggingUtil;
-import org.apache.maven.plugin.logging.Log;
+import com.internetms52.object_pool.util.PluginLogger;
+import com.internetms52.object_pool.util.PluginLoggerProvider;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Optional;
 
+
 public class ClassAnnotationScanner {
-    Log logger;
+    private static final PluginLogger logger = PluginLoggerProvider.getLogger(ClassAnnotationScanner.class);
     String annotationName;
 
-
-    public ClassAnnotationScanner(Log logger, String annotationName) {
-        this.logger = logger;
+    public ClassAnnotationScanner(String annotationName) {
         this.annotationName = annotationName;
     }
 
@@ -37,9 +36,7 @@ public class ClassAnnotationScanner {
                 );
             }
         } catch (Exception ex) {
-            logger.error(
-                    LoggingUtil.buildMsg(this.getClass().getName(), ";", ex.getMessage())
-            );
+            logger.error(this.getClass().getName(), ";", ex.getMessage());
         }
         return resultOpt;
     }

@@ -1,4 +1,6 @@
+com/internetms52/object_pool/util/PluginLogger.class
 com/internetms52/object_pool/scanner/ClassAnnotationScanResponse.class
 com/internetms52/object_pool/scanner/ClassAnnotationScanner.class
-com/internetms52/object_pool/util/LoggingUtil.class
+com/internetms52/object_pool/util/PluginLoggerProvider.class
+com/internetms52/object_pool/scanner/JavaFileScanner.class
 com/internetms52/object_pool/annotation/ObjectPool.class
