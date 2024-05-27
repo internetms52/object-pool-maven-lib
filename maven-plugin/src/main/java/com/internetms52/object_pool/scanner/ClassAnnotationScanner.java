@@ -3,6 +3,7 @@ package com.internetms52.object_pool.scanner;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.internetms52.object_pool.util.LoggingUtil;
 import org.apache.maven.plugin.logging.Log;
 
 import java.io.File;
@@ -36,7 +37,9 @@ public class ClassAnnotationScanner {
                 );
             }
         } catch (Exception ex) {
-            logger.error(ex.getMessage());
+            logger.error(
+                    LoggingUtil.buildMsg(this.getClass().getName(), ";", ex.getMessage())
+            );
         }
         return resultOpt;
     }

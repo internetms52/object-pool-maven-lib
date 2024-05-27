@@ -1,3 +1,4 @@
 com/internetms52/object_pool/scanner/ClassAnnotationScanResponse.class
 com/internetms52/object_pool/scanner/ClassAnnotationScanner.class
+com/internetms52/object_pool/util/LoggingUtil.class
 com/internetms52/object_pool/annotation/ObjectPool.class
