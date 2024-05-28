@@ -1,14 +1,25 @@
 package com.internetms52.object_pool.scanner;
 
+import com.internetms52.object_pool.filter.PluginFileFilter;
 import com.internetms52.object_pool.util.PluginLogger;
 import com.internetms52.object_pool.util.PluginLoggerProvider;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.checkerframework.checker.units.qual.A;
 
 import java.io.File;
+import java.sql.Array;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
-public class JavaFileScanner {
-    PluginLogger logger = PluginLoggerProvider.getLogger(JavaFileScanner.class);
+public class JavaFileScanner implements PluginFileScanner<File> {
+
+    List<PluginFileFilter<File>> fileFilters = new ArrayList<>();
+
+    public JavaFileScanner(List<PluginFileFilter<File>> fileFilters) {
+        this.fileFilters = fileFilters;
+    }
 
     public void execute(List<String> compileSourceRoots) throws MojoExecutionException {
         for (String sourceRoot : compileSourceRoots) {
@@ -19,16 +30,32 @@ public class JavaFileScanner {
         }
     }
 
-    private void listFilesRecursively(File file) {
+    private List<File> listFilesRecursively(File file) {
+        List<File> resultList = new ArrayList<>();
         if (file.isDirectory()) {
             File[] files = file.listFiles();
             if (files != null) {
                 for (File f : files) {
-                    listFilesRecursively(f);
+                    resultList.addAll(listFilesRecursively(f));
                 }
             }
-        } else if (file.isFile() && file.getName().endsWith(".java")) {
-            logger.info("Source file: " + file.getAbsolutePath());
+        } else {
+            Optional<PluginFileFilter<File>> failedFilterOpt = fileFilters.stream()
+                    .filter(filter -> !filter.filter(file))
+                    .findFirst();
+            if (failedFilterOpt.isEmpty()) {
+                resultList.add(file);
+            }
         }
+        return resultList;
+    }
+
+    @Override
+    public List<File> execute(String rootPath) {
+        File sourceRootFile = new File(rootPath);
+        if (sourceRootFile.exists() && sourceRootFile.isDirectory()) {
+            return listFilesRecursively(sourceRootFile);
+        }
+        return new ArrayList<>();
     }
 }
