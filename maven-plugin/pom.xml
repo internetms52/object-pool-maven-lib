@@ -10,7 +10,7 @@
     <name>object-pool</name>
     <packaging>maven-plugin</packaging>
     <!-- FIXME change it to the project's website -->
-    <url>https://github.com/internetms52/lombok-auto-testing-maven-plugin</url>
+    <url>https://github.com/internetms52/object-pool-maven-plugin</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -51,6 +51,18 @@
             <artifactId>javapoet</artifactId>
             <version>1.10.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.auto.service</groupId>
+            <artifactId>auto-service</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.internetms52</groupId>
+            <artifactId>object-pool-maven-plugin</artifactId>
+            <version>0.0.1</version>
+<!--            <scope>test</scope>-->
+        </dependency>
     </dependencies>
 
     <build>
@@ -68,7 +80,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <goalPrefix>lombok-auto-testing</goalPrefix> <!-- 指定你的插件目標的前綴 -->
+                    <goalPrefix>object-pool</goalPrefix> <!-- 指定你的插件目標的前綴 -->
                     <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
                     <!-- 更多的配置可以在這裡加入 -->
                 </configuration>

@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="object-pool-maven-plugin" />
+        <module name="maven-plugin" />
       </profile>
     </annotationProcessing>
   </component>
