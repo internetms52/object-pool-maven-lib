@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin>
-    <name>lombok-auto-testing-maven-plugin</name>
-    <description>lombok-auto-testing-maven-plugin</description>
+    <name>object-pool-maven-plugin</name>
+    <description>object-pool-maven-plugin</description>
     <groupId>com.internetms52</groupId>
-    <artifactId>lombok-auto-testing-maven-plugin</artifactId>
+    <artifactId>object-pool-maven-plugin</artifactId>
     <version>0.0.1</version>
     <!-- Other plugin metadata -->
 </plugin>

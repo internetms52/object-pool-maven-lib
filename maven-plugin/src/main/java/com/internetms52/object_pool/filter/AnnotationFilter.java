@@ -3,7 +3,7 @@ package com.internetms52.object_pool.filter;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 
-public class AnnotationFilter implements PluginFileFilter<CompilationUnit>{
+public class AnnotationFilter implements PluginFileFilter<CompilationUnit> {
     String annotationName;
 
     public AnnotationFilter(String annotationName) {

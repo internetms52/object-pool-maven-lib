@@ -12,11 +12,13 @@ import java.util.Optional;
 
 
 public class ClassAnnotationScanner {
-    PluginLogger pluginLogger = PluginLoggerProvider.getLogger(this.getClass());
+    private static PluginLogger pluginLogger = PluginLoggerProvider.getLogger(ClassAnnotationScanner.class);
 
     String annotationName;
 
-
+    public ClassAnnotationScanner(String annotationName) {
+        this.annotationName = annotationName;
+    }
 
     public Optional<ClassAnnotationScanResponse> execute(File javaFile) {
         Optional<ClassAnnotationScanResponse> resultOpt = Optional.empty();

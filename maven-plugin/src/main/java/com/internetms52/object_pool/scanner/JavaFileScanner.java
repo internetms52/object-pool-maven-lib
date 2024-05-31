@@ -1,17 +1,11 @@
 package com.internetms52.object_pool.scanner;
 
 import com.internetms52.object_pool.filter.PluginFileFilter;
-import com.internetms52.object_pool.util.PluginLogger;
-import com.internetms52.object_pool.util.PluginLoggerProvider;
-import org.apache.maven.plugin.MojoExecutionException;
-import org.checkerframework.checker.units.qual.A;
 
 import java.io.File;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class JavaFileScanner implements PluginFileScanner<File> {
 
@@ -21,7 +15,7 @@ public class JavaFileScanner implements PluginFileScanner<File> {
         this.fileFilters = fileFilters;
     }
 
-    public void execute(List<String> compileSourceRoots) throws MojoExecutionException {
+    public void execute(List<String> compileSourceRoots) {
         for (String sourceRoot : compileSourceRoots) {
             File sourceRootFile = new File(sourceRoot);
             if (sourceRootFile.exists() && sourceRootFile.isDirectory()) {
