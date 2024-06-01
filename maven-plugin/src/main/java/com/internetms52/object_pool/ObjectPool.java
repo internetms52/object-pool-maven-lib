@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @SuppressWarnings("unchecked")
 public class ObjectPool {
-    NativeLogger nativeLogger = new NativeLogger(ObjectPool.class);
+    private final NativeLogger nativeLogger = new NativeLogger(ObjectPool.class);
     private final ConcurrentHashMap<Class<?>, Object> pool = new ConcurrentHashMap<>();
     private final ExistsObjectPoolGetter existsObjectPoolGetter = new ExistsObjectPoolGetter(pool);
     private final NoArgObjectPoolGetter noArgObjectPoolGetter = new NoArgObjectPoolGetter();
@@ -27,12 +27,13 @@ public class ObjectPool {
             if (availableConstructor == null) {
                 throw new AmbiguousConstructorException(clazz.getName());
             }
-            if (noArgObjectPoolGetter.accept(clazz)) {
+            if (availableConstructor.getParameterTypes().length == 0
+                    && noArgObjectPoolGetter.accept(clazz)) {
                 return (T) noArgObjectPoolGetter.getObject(clazz);
             }
             T result = getMultiArgObject(new Constructor<?>[]{availableConstructor});
             if (result == null) {
-                throw new UnsatisfiedObjectPoolConstructor(clazz.getName());
+                throw new MultiArgInstantiateException(clazz.getName());
             } else {
                 return result;
             }
@@ -42,7 +43,7 @@ public class ObjectPool {
         }
     }
 
-    private Constructor<?> getAvailableConstructor(Constructor<?>[] constructors) throws AmbiguousConstructorException {
+    private Constructor<?> getAvailableConstructor(Constructor<?>[] constructors) {
         Constructor<?> annotatedConstructor = null;
         for (Constructor<?> constructor : constructors) {
             if (constructor.isAnnotationPresent(com.internetms52.object_pool.annotation.ObjectPool.class)) {
@@ -58,7 +59,7 @@ public class ObjectPool {
         return null;
     }
 
-    private <T> T getMultiArgObject(Constructor<?>[] constructors) throws InvocationTargetException, InstantiationException, IllegalAccessException, MultiArgInstantiateException {
+    private <T> T getMultiArgObject(Constructor<?>[] constructors) throws InvocationTargetException, InstantiationException, IllegalAccessException {
         for (Constructor<?> constructor : constructors) {
             // 獲取構造函數的參數類型
             Class<?>[] parameterTypes = constructor.getParameterTypes();
