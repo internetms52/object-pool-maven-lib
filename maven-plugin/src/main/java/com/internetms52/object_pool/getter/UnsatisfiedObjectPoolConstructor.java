@@ -4,4 +4,8 @@ public class UnsatisfiedObjectPoolConstructor extends Exception {
     public UnsatisfiedObjectPoolConstructor(String message) {
         super(message);
     }
+
+    public UnsatisfiedObjectPoolConstructor(Throwable cause) {
+        super(cause);
+    }
 }

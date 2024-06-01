@@ -1,19 +1,31 @@
 package com.internetms52.object_pool.getter;
 
+import com.internetms52.object_pool.util.NativeLogger;
+
+import java.lang.reflect.InvocationTargetException;
+
 public class NoArgObjectPoolGetter implements ObjectPoolGetter {
-    private Object newInstance;
+    NativeLogger nativeLogger = new NativeLogger(NoArgObjectPoolGetter.class);
 
     @Override
     public boolean accept(Class<?> clazz) {
         try {
-            newInstance = clazz.getConstructor().newInstance();
+            clazz.getConstructor().newInstance();
+            return true;
         } catch (Exception e) {
+            nativeLogger.error(e);
         }
-        return newInstance != null;
+        return false;
     }
 
     @Override
     public Object getObject(Class<?> clazz) {
-        return newInstance;
+        try {
+            return clazz.getConstructor().newInstance();
+        } catch (InvocationTargetException | InstantiationException | IllegalAccessException |
+                 NoSuchMethodException e) {
+            nativeLogger.error(e);
+        }
+        return null;
     }
 }

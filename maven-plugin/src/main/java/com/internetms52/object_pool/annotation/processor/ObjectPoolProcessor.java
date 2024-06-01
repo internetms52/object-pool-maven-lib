@@ -23,7 +23,6 @@ import java.util.Set;
 public class ObjectPoolProcessor extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        System.out.println("ObjectPoolProcessor");
         for (Element element : roundEnv.getElementsAnnotatedWith(ObjectPool.class)) {
             if (element instanceof TypeElement) {
                 TypeElement classElement = (TypeElement) element;
