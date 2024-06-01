@@ -1,9 +1,6 @@
 package com.internetms52.object_pool;
 
-import com.internetms52.object_pool.getter.AmbiguousConstructorException;
-import com.internetms52.object_pool.getter.ExistsObjectPoolGetter;
-import com.internetms52.object_pool.getter.NoArgObjectPoolGetter;
-import com.internetms52.object_pool.getter.UnsatisfiedObjectPoolConstructor;
+import com.internetms52.object_pool.getter.*;
 import com.internetms52.object_pool.util.NativeLogger;
 
 import java.lang.reflect.Constructor;
@@ -26,13 +23,18 @@ public class ObjectPool {
             }
             // 獲取所有的構造函數
             Constructor<?>[] constructors = clazz.getDeclaredConstructors();
-            if (constructors.length > 1) {
+            Constructor<?> availableConstructor = getAvailableConstructor(constructors);
+            if (availableConstructor == null) {
                 throw new AmbiguousConstructorException(clazz.getName());
+            }
+            if (noArgObjectPoolGetter.accept(clazz)) {
+                return (T) noArgObjectPoolGetter.getObject(clazz);
+            }
+            T result = getMultiArgObject(new Constructor<?>[]{availableConstructor});
+            if (result == null) {
+                throw new UnsatisfiedObjectPoolConstructor(clazz.getName());
             } else {
-                if (noArgObjectPoolGetter.accept(clazz)) {
-                    return (T) noArgObjectPoolGetter.getObject(clazz);
-                }
-                return getMultiArgObject(clazz);
+                return result;
             }
         } catch (Exception e) {
             nativeLogger.error(e);
@@ -40,19 +42,23 @@ public class ObjectPool {
         }
     }
 
-    /**
-     * 找到一個constructor，所有的參數都滿足
-     *
-     * @param clazz
-     * @return
-     */
-    private <T> T getMultiArgObject(Class<?> clazz) throws InvocationTargetException, InstantiationException, IllegalAccessException, UnsatisfiedObjectPoolConstructor, AmbiguousConstructorException {
-        // 檢查參數類型是否包含指定的註解
-        if (!clazz.isAnnotationPresent(com.internetms52.object_pool.annotation.ObjectPool.class)) {
-            throw new UnsatisfiedObjectPoolConstructor(clazz.getName());
+    private Constructor<?> getAvailableConstructor(Constructor<?>[] constructors) throws AmbiguousConstructorException {
+        Constructor<?> annotatedConstructor = null;
+        for (Constructor<?> constructor : constructors) {
+            if (constructor.isAnnotationPresent(com.internetms52.object_pool.annotation.ObjectPool.class)) {
+                annotatedConstructor = constructor;
+            }
         }
-        // 獲取所有的構造函數
-        Constructor<?>[] constructors = clazz.getDeclaredConstructors();
+        if (annotatedConstructor != null) {
+            return annotatedConstructor;
+        }
+        if (constructors.length == 1) {
+            return constructors[0];
+        }
+        return null;
+    }
+
+    private <T> T getMultiArgObject(Constructor<?>[] constructors) throws InvocationTargetException, InstantiationException, IllegalAccessException, MultiArgInstantiateException {
         for (Constructor<?> constructor : constructors) {
             // 獲取構造函數的參數類型
             Class<?>[] parameterTypes = constructor.getParameterTypes();
@@ -64,7 +70,7 @@ public class ObjectPool {
                 }
             }
         }
-        throw new UnsatisfiedObjectPoolConstructor(clazz.getName());
+        return null;
     }
 
     private List<Object> getParameterTypeObjectList(Class<?>[] parameterTypes) {
