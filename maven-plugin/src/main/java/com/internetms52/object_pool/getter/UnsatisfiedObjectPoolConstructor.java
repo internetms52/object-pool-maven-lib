@@ -1,0 +1,7 @@
+package com.internetms52.object_pool.getter;
+
+public class UnsatisfiedObjectPoolConstructor extends Exception {
+    public UnsatisfiedObjectPoolConstructor(String message) {
+        super(message);
+    }
+}
