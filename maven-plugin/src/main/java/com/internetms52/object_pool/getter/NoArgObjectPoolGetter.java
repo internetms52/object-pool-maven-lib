@@ -13,19 +13,18 @@ public class NoArgObjectPoolGetter implements ObjectPoolGetter {
             clazz.getConstructor().newInstance();
             return true;
         } catch (Exception e) {
-            nativeLogger.error(e);
+            nativeLogger.debug(e.getMessage());
         }
         return false;
     }
 
     @Override
-    public Object getObject(Class<?> clazz) {
+    public Object getObject(Class<?> clazz) throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
         try {
             return clazz.getConstructor().newInstance();
         } catch (InvocationTargetException | InstantiationException | IllegalAccessException |
                  NoSuchMethodException e) {
-            nativeLogger.error(e);
+            throw e;
         }
-        return null;
     }
 }

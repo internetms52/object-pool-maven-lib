@@ -1,5 +1,6 @@
 package com.internetms52.object_pool;
 
+import com.internetms52.object_pool.getter.AmbiguousConstructorException;
 import com.internetms52.object_pool.getter.ExistsObjectPoolGetter;
 import com.internetms52.object_pool.getter.NoArgObjectPoolGetter;
 import com.internetms52.object_pool.getter.UnsatisfiedObjectPoolConstructor;
@@ -23,10 +24,16 @@ public class ObjectPool {
             if (existsObjectPoolGetter.accept(clazz)) {
                 return (T) existsObjectPoolGetter.getObject(clazz);
             }
-            if (noArgObjectPoolGetter.accept(clazz)) {
-                return (T) noArgObjectPoolGetter.getObject(clazz);
+            // 獲取所有的構造函數
+            Constructor<?>[] constructors = clazz.getDeclaredConstructors();
+            if (constructors.length > 1) {
+                throw new AmbiguousConstructorException(clazz.getName());
+            } else {
+                if (noArgObjectPoolGetter.accept(clazz)) {
+                    return (T) noArgObjectPoolGetter.getObject(clazz);
+                }
+                return getMultiArgObject(clazz);
             }
-            return getMultiArgObject(clazz);
         } catch (Exception e) {
             nativeLogger.error(e);
             throw new UnsatisfiedObjectPoolConstructor(e);
@@ -39,7 +46,7 @@ public class ObjectPool {
      * @param clazz
      * @return
      */
-    private <T> T getMultiArgObject(Class<?> clazz) throws InvocationTargetException, InstantiationException, IllegalAccessException, UnsatisfiedObjectPoolConstructor {
+    private <T> T getMultiArgObject(Class<?> clazz) throws InvocationTargetException, InstantiationException, IllegalAccessException, UnsatisfiedObjectPoolConstructor, AmbiguousConstructorException {
         // 檢查參數類型是否包含指定的註解
         if (!clazz.isAnnotationPresent(com.internetms52.object_pool.annotation.ObjectPool.class)) {
             throw new UnsatisfiedObjectPoolConstructor(clazz.getName());
@@ -68,7 +75,7 @@ public class ObjectPool {
             }
             return constructorParameterList;
         } catch (Exception ex) {
-            nativeLogger.info(ex.getClass().getName(), ex.getMessage());
+            nativeLogger.debug(ex.getClass().getName(), ex.getMessage());
         }
         return new ArrayList<>();
     }

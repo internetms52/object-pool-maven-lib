@@ -18,6 +18,10 @@ public class NativeLogger {
         return stringBuilder.toString();
     }
 
+    public void debug(String... msg) {
+        logger.log(Level.FINE, strBinder(msg));
+    }
+
     public void info(String... msg) {
         logger.log(Level.INFO, strBinder(msg));
     }
