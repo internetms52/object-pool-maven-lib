@@ -2,3 +2,4 @@
 /maven-plugin/target/
 /.idea
 /maven-lib/target
+/maven-lib/.idea

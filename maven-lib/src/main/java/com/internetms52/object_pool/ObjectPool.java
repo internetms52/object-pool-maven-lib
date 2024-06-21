@@ -1,5 +1,6 @@
 package com.internetms52.object_pool;
 
+import com.internetms52.object_pool.annotation.ObjectPoolConstructor;
 import com.internetms52.object_pool.getter.*;
 import com.internetms52.object_pool.util.NativeLogger;
 
@@ -15,6 +16,10 @@ public class ObjectPool {
     private final ConcurrentHashMap<Class<?>, Object> pool = new ConcurrentHashMap<>();
     private final ExistsObjectPoolGetter existsObjectPoolGetter = new ExistsObjectPoolGetter(pool);
     private final NoArgObjectPoolGetter noArgObjectPoolGetter = new NoArgObjectPoolGetter();
+
+    public void addObject(Object o) {
+        pool.putIfAbsent(o.getClass(), o);
+    }
 
     public <T> T getObject(Class<?> clazz) throws UnsatisfiedObjectPoolConstructor {
         try {
@@ -46,7 +51,7 @@ public class ObjectPool {
     private Constructor<?> getAvailableConstructor(Constructor<?>[] constructors) {
         Constructor<?> annotatedConstructor = null;
         for (Constructor<?> constructor : constructors) {
-            if (constructor.isAnnotationPresent(com.internetms52.object_pool.annotation.ObjectPool.class)) {
+            if (constructor.isAnnotationPresent(ObjectPoolConstructor.class)) {
                 annotatedConstructor = constructor;
             }
         }
