@@ -32,14 +32,15 @@ public class ObjectPool {
             if (availableConstructor == null) {
                 throw new AmbiguousConstructorException(clazz.getName());
             }
+            T result = getMultiArgObject(new Constructor<?>[]{availableConstructor});
             if (availableConstructor.getParameterTypes().length == 0
                     && noArgObjectPoolGetter.accept(clazz)) {
-                return (T) noArgObjectPoolGetter.getObject(clazz);
+                result = (T) noArgObjectPoolGetter.getObject(clazz);
             }
-            T result = getMultiArgObject(new Constructor<?>[]{availableConstructor});
             if (result == null) {
                 throw new MultiArgInstantiateException(clazz.getName());
             } else {
+                addObject(result);
                 return result;
             }
         } catch (Exception e) {
