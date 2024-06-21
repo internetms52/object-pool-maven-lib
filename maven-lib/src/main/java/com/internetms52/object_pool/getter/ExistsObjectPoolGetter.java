@@ -1,5 +1,7 @@
 package com.internetms52.object_pool.getter;
 
+import com.internetms52.object_pool.class_info.ClassInfo;
+
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ExistsObjectPoolGetter implements ObjectPoolGetter {
@@ -10,13 +12,13 @@ public class ExistsObjectPoolGetter implements ObjectPoolGetter {
     }
 
     @Override
-    public boolean accept(Class<?> clazz) {
-        return contains(clazz);
+    public boolean accept(ClassInfo classInfo) {
+        return contains(classInfo.getClazz());
     }
 
     @Override
-    public Object getObject(Class<?> clazz) {
-        return getFromObjectPool(clazz);
+    public Object getObject(ClassInfo classInfo) {
+        return getFromObjectPool(classInfo.getClazz());
     }
 
     private boolean contains(Class<?> clazz) {

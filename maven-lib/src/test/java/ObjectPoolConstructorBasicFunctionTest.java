@@ -12,10 +12,17 @@ public class ObjectPoolConstructorBasicFunctionTest {
     @Test
     public void overrideTest1() throws UnsatisfiedObjectPoolConstructor {
         UserObject uo1 = pool.getObject(UserObject.class);
-        UserObject manualUo = new UserObject(
+        UserObject uo2 = pool.getObject(UserObject.class);
+        Assert.assertEquals(uo1.getUserName(), uo2.getUserName());
+        Assert.assertEquals(uo1.getUserEmail(), uo2.getUserEmail());
+    }
+
+    @Test
+    public void overrideTest2() throws UnsatisfiedObjectPoolConstructor {
+        UserObject uo1 = new UserObject(
                 UUID.randomUUID().toString(), UUID.randomUUID().toString()
         );
-//        pool.addObject(manualUo);
+        pool.addObject(uo1);
         UserObject uo2 = pool.getObject(UserObject.class);
         Assert.assertEquals(uo1.getUserName(), uo2.getUserName());
         Assert.assertEquals(uo1.getUserEmail(), uo2.getUserEmail());
