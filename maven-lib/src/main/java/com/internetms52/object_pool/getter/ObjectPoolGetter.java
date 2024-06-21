@@ -1,9 +1,11 @@
 package com.internetms52.object_pool.getter;
 
+import com.internetms52.object_pool.class_info.ClassInfo;
+
 import java.lang.reflect.InvocationTargetException;
 
 public interface ObjectPoolGetter {
-    boolean accept(Class<?> clazz);
+    boolean accept(ClassInfo classInfo);
 
-    Object getObject(Class<?> clazz) throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException;
+    Object getObject(ClassInfo classInfo) throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException;
 }

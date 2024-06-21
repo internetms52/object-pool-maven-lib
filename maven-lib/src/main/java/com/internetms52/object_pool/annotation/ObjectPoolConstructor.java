@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.CONSTRUCTOR) // Specify that this annotation can be applied to classes
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ObjectPool {
-    
+public @interface ObjectPoolConstructor {
+
 }
