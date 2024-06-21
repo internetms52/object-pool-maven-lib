@@ -64,7 +64,7 @@ public class ObjectPool {
             // 判斷是否為多參數構造函數
             if (parameterTypes.length > 0) {
                 List<Object> constructorParameterObjects = getParameterTypeObjectList(parameterTypes);
-                if (constructorParameterObjects.size() > 0) {
+                if (!constructorParameterObjects.isEmpty()) {
                     return (T) constructor.newInstance(constructorParameterObjects.toArray());
                 }
             }
