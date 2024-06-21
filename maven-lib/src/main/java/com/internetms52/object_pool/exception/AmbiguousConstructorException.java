@@ -1,4 +1,4 @@
-package com.internetms52.object_pool.getter;
+package com.internetms52.object_pool.exception;
 
 public class AmbiguousConstructorException extends Exception {
     public AmbiguousConstructorException() {

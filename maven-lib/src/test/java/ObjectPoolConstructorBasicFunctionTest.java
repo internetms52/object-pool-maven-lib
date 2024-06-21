@@ -1,4 +1,5 @@
 import com.internetms52.object_pool.ObjectPool;
+import com.internetms52.object_pool.exception.IllegalStateException;
 import com.internetms52.object_pool.getter.UnsatisfiedObjectPoolConstructor;
 import object_sample.UserObject;
 import org.junit.Assert;
@@ -18,7 +19,7 @@ public class ObjectPoolConstructorBasicFunctionTest {
     }
 
     @Test
-    public void overrideTest2() throws UnsatisfiedObjectPoolConstructor {
+    public void overrideTest2() throws UnsatisfiedObjectPoolConstructor, IllegalStateException {
         UserObject uo1 = new UserObject(
                 UUID.randomUUID().toString(), UUID.randomUUID().toString()
         );

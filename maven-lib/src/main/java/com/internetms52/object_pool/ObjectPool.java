@@ -1,9 +1,13 @@
 package com.internetms52.object_pool;
 
-import com.internetms52.object_pool.annotation.ObjectPoolConstructor;
 import com.internetms52.object_pool.class_info.ClassInfo;
 import com.internetms52.object_pool.class_info.ClassInfoConverter;
-import com.internetms52.object_pool.getter.*;
+import com.internetms52.object_pool.exception.AmbiguousConstructorException;
+import com.internetms52.object_pool.exception.IllegalStateException;
+import com.internetms52.object_pool.exception.MultiArgInstantiateException;
+import com.internetms52.object_pool.getter.ExistsObjectPoolGetter;
+import com.internetms52.object_pool.getter.NoArgObjectPoolGetter;
+import com.internetms52.object_pool.getter.UnsatisfiedObjectPoolConstructor;
 import com.internetms52.object_pool.util.NativeLogger;
 
 import java.lang.reflect.Constructor;
@@ -20,7 +24,10 @@ public class ObjectPool {
     private final ExistsObjectPoolGetter existsObjectPoolGetter = new ExistsObjectPoolGetter(pool);
     private final NoArgObjectPoolGetter noArgObjectPoolGetter = new NoArgObjectPoolGetter();
 
-    public void addObject(Object o) {
+    public void addObject(Object o) throws IllegalStateException {
+        if (pool.containsKey(o.getClass())) {
+            throw new IllegalStateException();
+        }
         pool.putIfAbsent(o.getClass(), o);
     }
 
