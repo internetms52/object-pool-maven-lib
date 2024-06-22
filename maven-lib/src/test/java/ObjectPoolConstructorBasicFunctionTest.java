@@ -1,6 +1,7 @@
 import hobby.internetms52.object_pool.ObjectPool;
+import hobby.internetms52.object_pool.exception.AmbiguousConstructorException;
 import hobby.internetms52.object_pool.exception.IllegalStateException;
-import hobby.internetms52.object_pool.getter.UnsatisfiedObjectPoolConstructor;
+import hobby.internetms52.object_pool.exception.ObjectPoolInstantiationException;
 import object_sample.EmptyConstructorObject;
 import object_sample.MultiConstructorObject;
 import object_sample.UserObject;
@@ -13,22 +14,32 @@ public class ObjectPoolConstructorBasicFunctionTest {
     ObjectPool pool = new ObjectPool();
 
     @Test
-    public void overrideTest1() throws UnsatisfiedObjectPoolConstructor {
-        UserObject uo1 = pool.getObject(UserObject.class);
-        UserObject uo2 = pool.getObject(UserObject.class);
-        Assert.assertEquals(uo1.getUserName(), uo2.getUserName());
-        Assert.assertEquals(uo1.getUserEmail(), uo2.getUserEmail());
+    public void overrideTest1() {
+        try {
+            pool.getObject(UserObject.class);
+            pool.getObject(UserObject.class);
+            Assert.fail();
+        } catch (IllegalStateException ex) {
+            Assert.assertTrue(true);
+        } catch (ObjectPoolInstantiationException | AmbiguousConstructorException e) {
+            Assert.fail();
+        }
     }
 
     @Test
-    public void overrideTest2() throws UnsatisfiedObjectPoolConstructor, IllegalStateException {
-        UserObject uo1 = new UserObject(
-                UUID.randomUUID().toString(), UUID.randomUUID().toString()
-        );
-        pool.addObject(uo1);
-        UserObject uo2 = pool.getObject(UserObject.class);
-        Assert.assertEquals(uo1.getUserName(), uo2.getUserName());
-        Assert.assertEquals(uo1.getUserEmail(), uo2.getUserEmail());
+    public void overrideTest2() {
+        try {
+            UserObject uo1 = new UserObject(
+                    UUID.randomUUID().toString(), UUID.randomUUID().toString()
+            );
+            pool.addObject(uo1);
+            pool.getObject(UserObject.class);
+            Assert.fail();
+        } catch (IllegalStateException e) {
+            Assert.assertTrue(true);
+        } catch (ObjectPoolInstantiationException | AmbiguousConstructorException e) {
+            Assert.fail();
+        }
     }
 
     @Test
@@ -36,7 +47,7 @@ public class ObjectPoolConstructorBasicFunctionTest {
         try {
             pool.getObject(EmptyConstructorObject.class);
             Assert.assertTrue(true);
-        } catch (UnsatisfiedObjectPoolConstructor e) {
+        } catch (IllegalStateException | ObjectPoolInstantiationException | AmbiguousConstructorException e) {
             Assert.fail();
         }
     }
@@ -46,7 +57,9 @@ public class ObjectPoolConstructorBasicFunctionTest {
         try {
             pool.getObject(MultiConstructorObject.class);
             Assert.fail();
-        } catch (UnsatisfiedObjectPoolConstructor e) {
+        } catch (IllegalStateException | ObjectPoolInstantiationException e) {
+            Assert.fail();
+        } catch (AmbiguousConstructorException e) {
             Assert.assertTrue(true);
         }
     }

@@ -4,10 +4,9 @@ import hobby.internetms52.object_pool.class_info.ClassInfo;
 import hobby.internetms52.object_pool.class_info.ClassInfoConverter;
 import hobby.internetms52.object_pool.exception.AmbiguousConstructorException;
 import hobby.internetms52.object_pool.exception.IllegalStateException;
-import hobby.internetms52.object_pool.exception.MultiArgInstantiateException;
+import hobby.internetms52.object_pool.exception.ObjectPoolInstantiationException;
 import hobby.internetms52.object_pool.getter.ExistsObjectPoolGetter;
 import hobby.internetms52.object_pool.getter.NoArgObjectPoolGetter;
-import hobby.internetms52.object_pool.getter.UnsatisfiedObjectPoolConstructor;
 import hobby.internetms52.object_pool.util.NativeLogger;
 
 import java.lang.reflect.Constructor;
@@ -31,43 +30,42 @@ public class ObjectPool {
         pool.putIfAbsent(o.getClass(), o);
     }
 
-    public <T> T getObject(Class<?> clazz) throws UnsatisfiedObjectPoolConstructor {
-        try {
-            ClassInfo classInfo = classInfoConverter.convert(clazz);
-            if (classInfo.getAvailableConstructor() == null) {
-                throw new AmbiguousConstructorException(clazz.getName());
-            }
-            T result = null;
-            if (existsObjectPoolGetter.accept(classInfo)) {
-                result = (T) existsObjectPoolGetter.getObject(classInfo);
-            } else if (noArgObjectPoolGetter.accept(classInfo)) {
-                result = (T) noArgObjectPoolGetter.getObject(classInfo);
-            } else {
-                result = getMultiArgObject(new Constructor<?>[]{classInfo.getAvailableConstructor()});
-            }
-            if (result == null) {
-                throw new MultiArgInstantiateException(clazz.getName());
-            } else {
-                addObject(result);
-                return result;
-            }
-        } catch (Exception e) {
-            nativeLogger.error(e);
-            throw new UnsatisfiedObjectPoolConstructor(e);
+    public <T> T getObject(Class<?> clazz) throws AmbiguousConstructorException, ObjectPoolInstantiationException, IllegalStateException {
+        ClassInfo classInfo = classInfoConverter.convert(clazz);
+        if (classInfo.getAvailableConstructor() == null) {
+            throw new AmbiguousConstructorException(clazz.getName());
+        }
+        T result = null;
+        if (existsObjectPoolGetter.accept(classInfo)) {
+            result = (T) existsObjectPoolGetter.getObject(classInfo);
+        } else if (noArgObjectPoolGetter.accept(classInfo)) {
+            result = (T) noArgObjectPoolGetter.getObject(classInfo);
+        } else {
+            result = getMultiArgObject(new Constructor<?>[]{classInfo.getAvailableConstructor()});
+        }
+        if (result == null) {
+            throw new ObjectPoolInstantiationException(clazz.getName());
+        } else {
+            addObject(result);
+            return result;
         }
     }
 
-    private <T> T getMultiArgObject(Constructor<?>[] constructors) throws InvocationTargetException, InstantiationException, IllegalAccessException {
-        for (Constructor<?> constructor : constructors) {
-            // 獲取構造函數的參數類型
-            Class<?>[] parameterTypes = constructor.getParameterTypes();
-            // 判斷是否為多參數構造函數
-            if (parameterTypes.length > 0) {
-                List<Object> constructorParameterObjects = getParameterTypeObjectList(parameterTypes);
-                if (!constructorParameterObjects.isEmpty()) {
-                    return (T) constructor.newInstance(constructorParameterObjects.toArray());
+    private <T> T getMultiArgObject(Constructor<?>[] constructors) throws ObjectPoolInstantiationException {
+        try {
+            for (Constructor<?> constructor : constructors) {
+                // 獲取構造函數的參數類型
+                Class<?>[] parameterTypes = constructor.getParameterTypes();
+                // 判斷是否為多參數構造函數
+                if (parameterTypes.length > 0) {
+                    List<Object> constructorParameterObjects = getParameterTypeObjectList(parameterTypes);
+                    if (!constructorParameterObjects.isEmpty()) {
+                        return (T) constructor.newInstance(constructorParameterObjects.toArray());
+                    }
                 }
             }
+        } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
+            throw new ObjectPoolInstantiationException(e);
         }
         return null;
     }
