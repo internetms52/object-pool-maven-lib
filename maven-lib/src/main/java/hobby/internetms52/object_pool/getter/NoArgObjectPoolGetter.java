@@ -1,7 +1,7 @@
-package com.internetms52.object_pool.getter;
+package hobby.internetms52.object_pool.getter;
 
-import com.internetms52.object_pool.class_info.ClassInfo;
-import com.internetms52.object_pool.util.NativeLogger;
+import hobby.internetms52.object_pool.class_info.ClassInfo;
+import hobby.internetms52.object_pool.util.NativeLogger;
 
 import java.lang.reflect.InvocationTargetException;
 

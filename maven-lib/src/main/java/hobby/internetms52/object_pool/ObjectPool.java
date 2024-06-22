@@ -1,14 +1,14 @@
-package com.internetms52.object_pool;
+package hobby.internetms52.object_pool;
 
-import com.internetms52.object_pool.class_info.ClassInfo;
-import com.internetms52.object_pool.class_info.ClassInfoConverter;
-import com.internetms52.object_pool.exception.AmbiguousConstructorException;
-import com.internetms52.object_pool.exception.IllegalStateException;
-import com.internetms52.object_pool.exception.MultiArgInstantiateException;
-import com.internetms52.object_pool.getter.ExistsObjectPoolGetter;
-import com.internetms52.object_pool.getter.NoArgObjectPoolGetter;
-import com.internetms52.object_pool.getter.UnsatisfiedObjectPoolConstructor;
-import com.internetms52.object_pool.util.NativeLogger;
+import hobby.internetms52.object_pool.class_info.ClassInfo;
+import hobby.internetms52.object_pool.class_info.ClassInfoConverter;
+import hobby.internetms52.object_pool.exception.AmbiguousConstructorException;
+import hobby.internetms52.object_pool.exception.IllegalStateException;
+import hobby.internetms52.object_pool.exception.MultiArgInstantiateException;
+import hobby.internetms52.object_pool.getter.ExistsObjectPoolGetter;
+import hobby.internetms52.object_pool.getter.NoArgObjectPoolGetter;
+import hobby.internetms52.object_pool.getter.UnsatisfiedObjectPoolConstructor;
+import hobby.internetms52.object_pool.util.NativeLogger;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

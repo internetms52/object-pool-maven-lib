@@ -1,4 +1,4 @@
-package com.internetms52.object_pool.class_info;
+package hobby.internetms52.object_pool.class_info;
 
 import java.lang.reflect.Constructor;
 

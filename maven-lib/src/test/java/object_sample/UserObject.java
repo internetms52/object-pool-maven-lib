@@ -1,6 +1,6 @@
 package object_sample;
 
-import com.internetms52.object_pool.annotation.ObjectPoolConstructor;
+import hobby.internetms52.object_pool.annotation.ObjectPoolConstructor;
 
 import java.util.UUID;
 

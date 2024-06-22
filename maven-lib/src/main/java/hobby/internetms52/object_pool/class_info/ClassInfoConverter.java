@@ -1,6 +1,6 @@
-package com.internetms52.object_pool.class_info;
+package hobby.internetms52.object_pool.class_info;
 
-import com.internetms52.object_pool.annotation.ObjectPoolConstructor;
+import hobby.internetms52.object_pool.annotation.ObjectPoolConstructor;
 
 import java.lang.reflect.Constructor;
 

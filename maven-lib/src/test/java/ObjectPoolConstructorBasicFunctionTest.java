@@ -1,6 +1,6 @@
-import com.internetms52.object_pool.ObjectPool;
-import com.internetms52.object_pool.exception.IllegalStateException;
-import com.internetms52.object_pool.getter.UnsatisfiedObjectPoolConstructor;
+import hobby.internetms52.object_pool.ObjectPool;
+import hobby.internetms52.object_pool.exception.IllegalStateException;
+import hobby.internetms52.object_pool.getter.UnsatisfiedObjectPoolConstructor;
 import object_sample.EmptyConstructorObject;
 import object_sample.MultiConstructorObject;
 import object_sample.UserObject;

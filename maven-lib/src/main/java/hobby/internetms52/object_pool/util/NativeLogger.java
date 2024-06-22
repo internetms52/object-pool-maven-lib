@@ -1,4 +1,4 @@
-package com.internetms52.object_pool.util;
+package hobby.internetms52.object_pool.util;
 
 import java.util.Arrays;
 import java.util.logging.Level;

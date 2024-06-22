@@ -1,4 +1,4 @@
-package com.internetms52.object_pool.annotation;
+package hobby.internetms52.object_pool.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
