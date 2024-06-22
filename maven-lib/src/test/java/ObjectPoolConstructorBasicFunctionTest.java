@@ -18,10 +18,8 @@ public class ObjectPoolConstructorBasicFunctionTest {
         try {
             pool.getObject(UserObject.class);
             pool.getObject(UserObject.class);
-            Assert.fail();
-        } catch (IllegalStateException ex) {
             Assert.assertTrue(true);
-        } catch (ObjectPoolInstantiationException | AmbiguousConstructorException e) {
+        } catch (IllegalStateException | ObjectPoolInstantiationException | AmbiguousConstructorException ex) {
             Assert.fail();
         }
     }
@@ -34,10 +32,8 @@ public class ObjectPoolConstructorBasicFunctionTest {
             );
             pool.addObject(uo1);
             pool.getObject(UserObject.class);
-            Assert.fail();
-        } catch (IllegalStateException e) {
             Assert.assertTrue(true);
-        } catch (ObjectPoolInstantiationException | AmbiguousConstructorException e) {
+        } catch (IllegalStateException | ObjectPoolInstantiationException | AmbiguousConstructorException e) {
             Assert.fail();
         }
     }

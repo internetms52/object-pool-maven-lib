@@ -36,7 +36,9 @@ public class ObjectPool {
             throw new AmbiguousConstructorException(clazz.getName());
         }
         T result = null;
+        boolean addObject = true;
         if (existsObjectPoolGetter.accept(classInfo)) {
+            addObject = false;
             result = (T) existsObjectPoolGetter.getObject(classInfo);
         } else if (noArgObjectPoolGetter.accept(classInfo)) {
             result = (T) noArgObjectPoolGetter.getObject(classInfo);
@@ -46,7 +48,9 @@ public class ObjectPool {
         if (result == null) {
             throw new ObjectPoolInstantiationException(clazz.getName());
         } else {
-            addObject(result);
+            if (addObject) {
+                addObject(result);
+            }
             return result;
         }
     }
