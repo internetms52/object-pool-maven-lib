@@ -11,6 +11,7 @@
     <packaging>jar</packaging>
     <!-- FIXME change it to the project's website -->
     <url>https://github.com/internetms52/object-pool-maven-lib</url>
+    <description>This is a library that implements an Object Pool, and it supports nested object creation as well as constructor specification.</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
