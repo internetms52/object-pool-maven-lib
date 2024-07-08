@@ -14,7 +14,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-
+/**
+ * A utility class that provides methods for managing an object pool.
+ *
+ * @author Eugene Lu.
+ * @version 1.0
+ */
 @SuppressWarnings("unchecked")
 public class ObjectPool {
     private final NativeLogger nativeLogger = new NativeLogger(ObjectPool.class);
