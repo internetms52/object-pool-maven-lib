@@ -66,6 +66,12 @@
             <organizationUrl>https://github.com/internetms52/object-pool-maven-lib</organizationUrl>
         </developer>
     </developers>
+    <distributionManagement>
+        <repository>
+            <id>deedff43-d3b5-46c1-a7ec-a652ae8e545d</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
