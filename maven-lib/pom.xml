@@ -44,7 +44,6 @@
                 <configuration>
                     <goalPrefix>object-pool</goalPrefix> <!-- 指定你的插件目標的前綴 -->
                     <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
-                    <!-- 更多的配置可以在這裡加入 -->
                 </configuration>
             </plugin>
             <plugin>
@@ -116,7 +115,7 @@
     </developers>
     <distributionManagement>
         <repository>
-            <id>deedff43-d3b5-46c1-a7ec-a652ae8e545d</id>
+            <id>central</id>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
