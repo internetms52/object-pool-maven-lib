@@ -29,10 +29,10 @@ public class ObjectPool {
     private final NoArgObjectPoolGetter noArgObjectPoolGetter = new NoArgObjectPoolGetter();
 
     public void addObject(Object o) throws IllegalStateException {
-        if (pool.containsKey(o.getClass())) {
-            throw new IllegalStateException();
+        Object existing = pool.putIfAbsent(o.getClass(), o);
+        if (existing != null) {
+            throw new IllegalStateException("Object of type " + o.getClass().getName() + " already exists in the pool.");
         }
-        pool.putIfAbsent(o.getClass(), o);
     }
 
     public <T> T getObject(Class<?> clazz) throws AmbiguousConstructorException, ObjectPoolInstantiationException, IllegalStateException {

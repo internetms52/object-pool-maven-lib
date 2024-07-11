@@ -39,6 +39,23 @@ public class ObjectPoolConstructorBasicFunctionTest {
     }
 
     @Test
+    public void overrideTest3() {
+        try {
+            UserObject uo1 = new UserObject(
+                    UUID.randomUUID().toString(), UUID.randomUUID().toString()
+            );
+            UserObject uo2 = new UserObject(
+                    UUID.randomUUID().toString(), UUID.randomUUID().toString()
+            );
+            pool.addObject(uo1);
+            pool.addObject(uo2);
+            Assert.fail();
+        } catch (IllegalStateException e) {
+            Assert.assertTrue(true);
+        }
+    }
+
+    @Test
     public void emptyConstructorTest1() {
         try {
             pool.getObject(EmptyConstructorObject.class);
