@@ -8,4 +8,5 @@ Object Pool 是一個Java Library ，用於協助管理並建立Java物件的生
 - 支持巢狀的物件創建行為，並且巢狀的物件自動創建也做的到
 - 不允許循環創建物件本身，也不允許已創立的物件被覆蓋，會發生Exception
 
+[Library Detail](/maven-lib/README.md)
 
