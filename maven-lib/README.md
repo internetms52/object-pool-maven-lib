@@ -14,7 +14,7 @@ To use this library in your Maven project, add the following dependency to your 
 <dependency>
     <groupId>io.github.internetms52</groupId>
     <artifactId>object-pool</artifactId>
-    <version>0.1.3</version>
+    <version>0.1.4</version>
 </dependency>
 ```
 
