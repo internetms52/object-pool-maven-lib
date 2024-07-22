@@ -4,6 +4,9 @@ import hobby.internetms52.object_pool.annotation.ObjectPoolConstructor;
 
 import java.lang.reflect.Constructor;
 
+/**
+ * convert class into classInfo.
+ */
 public class ClassInfoConverter {
     public ClassInfo convert(Class<?> clazz) {
         // 獲取所有的構造函數

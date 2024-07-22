@@ -30,7 +30,7 @@ public class ObjectPool {
     private final NoArgObjectPoolGetter noArgObjectPoolGetter = new NoArgObjectPoolGetter();
 
     public void addObject(Object o) throws IllegalStateException {
-        Object existing = pool.putIfAbsent(o.getClass().getName(), o);
+        Object existing = pool.putIfAbsent(o.getClass().getName(), o.getClass().getName());
         if (existing != null) {
             throw new IllegalStateException("Object of type " + o.getClass().getName() + " already exists in the pool.");
         }
