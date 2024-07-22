@@ -5,6 +5,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * qualified class constructor.
+ */
 @Target(ElementType.CONSTRUCTOR) // Specify that this annotation can be applied to classes
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ObjectPoolConstructor {

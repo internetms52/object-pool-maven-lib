@@ -1,10 +1,7 @@
 package hobby.internetms52.object_pool.class_info;
 
 import java.lang.reflect.Constructor;
-
-/**
- * Describe class information.
- */
+@SuppressWarnings("javadoc")
 public class ClassInfo {
     Class<?> clazz;
     Constructor<?> availableConstructor;
