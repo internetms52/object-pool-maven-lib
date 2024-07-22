@@ -7,7 +7,7 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-
+@SuppressWarnings("javadoc")
 public class ExistsObjectPoolGetter implements ObjectPoolGetter {
     ConcurrentHashMap<String, Object> pool;
 
