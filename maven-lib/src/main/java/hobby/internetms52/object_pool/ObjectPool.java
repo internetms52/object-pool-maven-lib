@@ -14,6 +14,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * A utility class that provides methods for managing an object pool.
  *
@@ -23,13 +24,13 @@ import java.util.concurrent.ConcurrentHashMap;
 @SuppressWarnings("unchecked")
 public class ObjectPool {
     private final NativeLogger nativeLogger = new NativeLogger(ObjectPool.class);
-    private final ConcurrentHashMap<Class<?>, Object> pool = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, Object> pool = new ConcurrentHashMap<>();
     private final ClassInfoConverter classInfoConverter = new ClassInfoConverter();
     private final ExistsObjectPoolGetter existsObjectPoolGetter = new ExistsObjectPoolGetter(pool);
     private final NoArgObjectPoolGetter noArgObjectPoolGetter = new NoArgObjectPoolGetter();
 
     public void addObject(Object o) throws IllegalStateException {
-        Object existing = pool.putIfAbsent(o.getClass(), o);
+        Object existing = pool.putIfAbsent(o.getClass().getName(), o);
         if (existing != null) {
             throw new IllegalStateException("Object of type " + o.getClass().getName() + " already exists in the pool.");
         }
