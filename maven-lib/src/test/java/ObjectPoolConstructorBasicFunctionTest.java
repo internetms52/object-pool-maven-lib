@@ -3,11 +3,14 @@ import hobby.internetms52.object_pool.exception.AmbiguousConstructorException;
 import hobby.internetms52.object_pool.exception.IllegalStateException;
 import hobby.internetms52.object_pool.exception.ObjectPoolInstantiationException;
 import object_sample.EmptyConstructorObject;
+import object_sample.GenericTypeObject;
 import object_sample.MultiConstructorObject;
 import object_sample.UserObject;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class ObjectPoolConstructorBasicFunctionTest {
@@ -74,6 +77,42 @@ public class ObjectPoolConstructorBasicFunctionTest {
             Assert.fail();
         } catch (AmbiguousConstructorException e) {
             Assert.assertTrue(true);
+        }
+    }
+
+    @Test
+    public void multiConstructorTest2() {
+        try {
+            String text = "test";
+            pool.addObject(text);
+            pool.getObject(MultiConstructorObject.class);
+            Assert.assertTrue(true);
+        } catch (IllegalStateException | ObjectPoolInstantiationException e) {
+            Assert.fail();
+        } catch (AmbiguousConstructorException e) {
+            Assert.assertTrue(true);
+        }
+    }
+
+
+    @Test
+    public void genericTypeTest1() {
+        try {
+            List<String> stringList = new ArrayList<>();
+            pool.addObject(stringList);
+        } catch (IllegalStateException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    public void genericTypeTest2() {
+        try {
+            GenericTypeObject map = new GenericTypeObject();
+            map.put("a", List.of("test"));
+            pool.addObject(map);
+        } catch (IllegalStateException e) {
+            throw new RuntimeException(e);
         }
     }
 }
