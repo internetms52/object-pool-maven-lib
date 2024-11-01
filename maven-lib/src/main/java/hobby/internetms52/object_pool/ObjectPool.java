@@ -12,6 +12,7 @@ import hobby.internetms52.object_pool.util.NativeLogger;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -42,17 +43,19 @@ public class ObjectPool {
     }
 
     private String getId(Class<?> clazz) {
+        StringBuilder stringBuilder = new StringBuilder();
         Type type = clazz.getGenericSuperclass();
+        stringBuilder.append(clazz.getName());
         if (type instanceof ParameterizedType parameterizedType) {
-            StringBuilder stringBuilder = new StringBuilder();
             Type[] multiTypeArguments = parameterizedType.getActualTypeArguments();
             Arrays.stream(multiTypeArguments).forEach(genericType -> {
+                if (genericType instanceof TypeVariable<?>) {
+                    throw new UnsupportedOperationException("class information been erased.");
+                }
                 stringBuilder.append(getId(genericType.getClass()));
             });
-            return stringBuilder.toString();
-        } else {
-            return clazz.getName();
         }
+        return stringBuilder.toString();
     }
 
     private int getHashId(Class<?> clazz) {

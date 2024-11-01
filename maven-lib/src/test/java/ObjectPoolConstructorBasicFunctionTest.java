@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public class ObjectPoolConstructorBasicFunctionTest {
     ObjectPool pool = new ObjectPool();
-    
+
     @Test
     public void overrideTest3() {
         try {
@@ -72,8 +72,11 @@ public class ObjectPoolConstructorBasicFunctionTest {
         try {
             List<String> stringList = new ArrayList<>();
             pool.addObject(stringList);
+            Assert.assertTrue(false);
+        } catch (UnsupportedOperationException e) {
+            Assert.assertTrue(true);
         } catch (IllegalStateException e) {
-            throw new RuntimeException(e);
+            Assert.assertTrue(false);
         }
     }
 
