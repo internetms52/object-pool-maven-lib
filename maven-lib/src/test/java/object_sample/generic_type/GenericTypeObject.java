@@ -1,4 +1,4 @@
-package object_sample;
+package object_sample.generic_type;
 
 import java.util.HashMap;
 import java.util.List;

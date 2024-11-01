@@ -44,9 +44,10 @@ public class ObjectPool {
 
     private String getId(Class<?> clazz) {
         StringBuilder stringBuilder = new StringBuilder();
-        Type type = clazz.getGenericSuperclass();
+        //parent generic check
+        Type extendedType = clazz.getGenericSuperclass();
         stringBuilder.append(clazz.getName());
-        if (type instanceof ParameterizedType parameterizedType) {
+        if (extendedType instanceof ParameterizedType parameterizedType) {
             Type[] multiTypeArguments = parameterizedType.getActualTypeArguments();
             Arrays.stream(multiTypeArguments).forEach(genericType -> {
                 if (genericType instanceof TypeVariable<?>) {
@@ -55,6 +56,14 @@ public class ObjectPool {
                 stringBuilder.append(getId(genericType.getClass()));
             });
         }
+        //interface check
+        Type[] interfaceType = clazz.getGenericInterfaces();
+        Arrays.stream(interfaceType).forEach(genericType -> {
+            if (genericType instanceof TypeVariable<?>) {
+                throw new UnsupportedOperationException("class information been erased.");
+            }
+            stringBuilder.append(getId(genericType.getClass()));
+        });
         return stringBuilder.toString();
     }
 

@@ -2,7 +2,12 @@ import hobby.internetms52.object_pool.ObjectPool;
 import hobby.internetms52.object_pool.exception.AmbiguousConstructorException;
 import hobby.internetms52.object_pool.exception.IllegalStateException;
 import hobby.internetms52.object_pool.exception.ObjectPoolInstantiationException;
-import object_sample.*;
+import object_sample.EmptyConstructorObject;
+import object_sample.MultiConstructorObject;
+import object_sample.MultiConstructorWithoutAnnotationObject;
+import object_sample.UserObject;
+import object_sample.generic_type.GenericTypeObject;
+import object_sample.generic_type.GenericTypeObject2;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -88,6 +93,19 @@ public class ObjectPoolConstructorBasicFunctionTest {
             pool.addObject(map);
         } catch (IllegalStateException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @Test
+    public void genericTypeTest3() {
+        try {
+            GenericTypeObject2<String> genericTypeString = new GenericTypeObject2<>();
+            GenericTypeObject2<Integer> genericTypeInteger = new GenericTypeObject2<>();
+            pool.addObject(genericTypeInteger);
+            pool.addObject(genericTypeString);
+            Assert.assertTrue(false);
+        } catch (IllegalStateException e) {
+            Assert.assertTrue(true);
         }
     }
 }
