@@ -8,6 +8,7 @@ import object_sample.MultiConstructorWithoutAnnotationObject;
 import object_sample.UserObject;
 import object_sample.generic_type.GenericTypeObject;
 import object_sample.generic_type.GenericTypeObject2;
+import object_sample.interface_type.*;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -104,6 +105,30 @@ public class ObjectPoolConstructorBasicFunctionTest {
             pool.addObject(genericTypeInteger);
             pool.addObject(genericTypeString);
             Assert.assertTrue(false);
+        } catch (IllegalStateException e) {
+            Assert.assertTrue(true);
+        }
+    }
+
+    @Test
+    public void interfaceTypeTest1() {
+        try {
+            InterfaceTypeT<String> interfaceTypeTString = new InterfaceTypeTString();
+            InterfaceTypeT<Integer> interfaceTypeTInteger = new InterfaceTypeTInteger();
+            pool.addObject(interfaceTypeTInteger);
+            pool.addObject(interfaceTypeTString);
+        } catch (IllegalStateException e) {
+            Assert.assertTrue(true);
+        }
+    }
+
+    @Test
+    public void interfaceTypeTest2() {
+        try {
+            InterfaceTypeK<InterfaceTypeT<String>> interfaceTypeTString = new InterfaceTypeStringNested();
+            InterfaceTypeK<InterfaceTypeT<Integer>> interfaceTypeTInteger = new InterfaceTypeIntegerNested();
+            pool.addObject(interfaceTypeTInteger);
+            pool.addObject(interfaceTypeTString);
         } catch (IllegalStateException e) {
             Assert.assertTrue(true);
         }

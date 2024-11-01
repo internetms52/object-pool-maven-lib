@@ -56,14 +56,14 @@ public class ObjectPool {
                 stringBuilder.append(getId(genericType.getClass()));
             });
         }
-        //interface check
-        Type[] interfaceType = clazz.getGenericInterfaces();
-        Arrays.stream(interfaceType).forEach(genericType -> {
-            if (genericType instanceof TypeVariable<?>) {
-                throw new UnsupportedOperationException("class information been erased.");
-            }
-            stringBuilder.append(getId(genericType.getClass()));
-        });
+        stringBuilder.append(getInterfaceId(clazz));
+        return stringBuilder.toString();
+    }
+
+    private String getInterfaceId(Class<?> clazz) {
+        StringBuilder stringBuilder = new StringBuilder();
+        Type[] interfaceTypes = clazz.getGenericInterfaces();
+        Arrays.stream(interfaceTypes).forEach(stringBuilder::append);
         return stringBuilder.toString();
     }
 
