@@ -1,4 +1,4 @@
-package object_sample.extended_generic_type;
+package object_sample.generic_type;
 
 public class GenericTypeObject3<K> {
 
