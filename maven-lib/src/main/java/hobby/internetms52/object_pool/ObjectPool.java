@@ -12,7 +12,6 @@ import hobby.internetms52.object_pool.util.NativeLogger;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -55,9 +54,6 @@ public class ObjectPool {
         if (extendedType instanceof ParameterizedType parameterizedType) {
             Type[] multiTypeArguments = parameterizedType.getActualTypeArguments();
             Arrays.stream(multiTypeArguments).forEach(genericType -> {
-                if (genericType instanceof TypeVariable<?>) {
-                    throw new UnsupportedOperationException("class information been erased.");
-                }
                 stringBuilder.append(genericType.getClass());
             });
         }
