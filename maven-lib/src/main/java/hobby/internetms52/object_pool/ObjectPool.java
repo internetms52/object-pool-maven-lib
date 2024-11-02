@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * A utility class that provides methods for managing an object pool.
@@ -115,5 +116,12 @@ public class ObjectPool {
         } catch (Exception e) {
             throw new ObjectPoolInstantiationException(e);
         }
+    }
+
+    public <T> List<T> filterByInterface(Class<T> interfaceClass) {
+        return pool.values().stream()
+                .filter(interfaceClass::isInstance)
+                .map(interfaceClass::cast)
+                .collect(Collectors.toList());
     }
 }

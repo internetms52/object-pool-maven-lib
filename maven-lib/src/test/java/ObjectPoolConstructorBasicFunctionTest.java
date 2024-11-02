@@ -154,8 +154,23 @@ public class ObjectPoolConstructorBasicFunctionTest {
             InterfaceTypeK<InterfaceTypeT<Integer>> interfaceTypeTInteger = new InterfaceTypeIntegerNested();
             pool.addObject(interfaceTypeTInteger);
             pool.addObject(interfaceTypeTString);
-        } catch (IllegalStateException e) {
             Assert.assertTrue(true);
+        } catch (Exception e) {
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void findByInterfaceTest1() {
+        try {
+            InterfaceTypeK<InterfaceTypeT<String>> interfaceTypeTString = new InterfaceTypeStringNested();
+            InterfaceTypeK<InterfaceTypeT<Integer>> interfaceTypeTInteger = new InterfaceTypeIntegerNested();
+            pool.addObject(interfaceTypeTInteger);
+            pool.addObject(interfaceTypeTString);
+            List<InterfaceTypeK> interfaceTypeTList = pool.filterByInterface(InterfaceTypeK.class);
+            Assert.assertEquals(2, interfaceTypeTList.size());
+        } catch (Exception e) {
+            Assert.fail();
         }
     }
 }
