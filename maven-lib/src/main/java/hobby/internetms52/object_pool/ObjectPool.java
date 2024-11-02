@@ -10,10 +10,16 @@ import hobby.internetms52.object_pool.getter.NoArgObjectPoolGetter;
 import hobby.internetms52.object_pool.util.NativeLogger;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+
 /**
  * A utility class that provides methods for managing an object pool.
  *
@@ -23,23 +29,54 @@ import java.util.concurrent.ConcurrentHashMap;
 @SuppressWarnings("unchecked")
 public class ObjectPool {
     private final NativeLogger nativeLogger = new NativeLogger(ObjectPool.class);
-    private final ConcurrentHashMap<Class<?>, Object> pool = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<Integer, Object> pool = new ConcurrentHashMap<>();
     private final ClassInfoConverter classInfoConverter = new ClassInfoConverter();
     private final ExistsObjectPoolGetter existsObjectPoolGetter = new ExistsObjectPoolGetter(pool);
     private final NoArgObjectPoolGetter noArgObjectPoolGetter = new NoArgObjectPoolGetter();
 
-    public void addObject(Object o) throws IllegalStateException {
-        Object existing = pool.putIfAbsent(o.getClass(), o);
+    public <T> T addObject(T o) throws IllegalStateException {
+        int hashId = getHashId(o.getClass());
+        Object existing = pool.putIfAbsent(hashId, o);
         if (existing != null) {
             throw new IllegalStateException("Object of type " + o.getClass().getName() + " already exists in the pool.");
         }
+        return o;
+    }
+
+    private String getId(Class<?> clazz) {
+        return getExtendId(clazz) +
+                getInterfaceId(clazz);
+    }
+
+    private String getExtendId(Class<?> clazz) {
+        StringBuilder stringBuilder = new StringBuilder();
+        Type extendedType = clazz.getGenericSuperclass();
+        stringBuilder.append(clazz.getName());
+        if (extendedType instanceof ParameterizedType parameterizedType) {
+            Type[] multiTypeArguments = parameterizedType.getActualTypeArguments();
+            Arrays.stream(multiTypeArguments).forEach(genericType -> {
+                if (genericType instanceof TypeVariable<?>) {
+                    throw new UnsupportedOperationException("class information been erased.");
+                }
+                stringBuilder.append(genericType.getClass());
+            });
+        }
+        return stringBuilder.toString();
+    }
+
+    private String getInterfaceId(Class<?> clazz) {
+        StringBuilder stringBuilder = new StringBuilder();
+        Type[] interfaceTypes = clazz.getGenericInterfaces();
+        Arrays.stream(interfaceTypes).forEach(stringBuilder::append);
+        return stringBuilder.toString();
+    }
+
+    private int getHashId(Class<?> clazz) {
+        return Objects.hash(getId(clazz));
     }
 
     public <T> T getObject(Class<?> clazz) throws AmbiguousConstructorException, ObjectPoolInstantiationException, IllegalStateException {
         ClassInfo classInfo = classInfoConverter.convert(clazz);
-        if (classInfo.getAvailableConstructor() == null) {
-            throw new AmbiguousConstructorException(clazz.getName());
-        }
         T result = null;
         boolean addObject = true;
         if (existsObjectPoolGetter.accept(classInfo)) {
@@ -48,47 +85,43 @@ public class ObjectPool {
         } else if (noArgObjectPoolGetter.accept(classInfo)) {
             result = (T) noArgObjectPoolGetter.getObject(classInfo);
         } else {
-            result = getMultiArgObject(new Constructor<?>[]{classInfo.getAvailableConstructor()});
+            result = getMultiArgObject(classInfo.getAvailableConstructor());
         }
         if (result == null) {
             throw new ObjectPoolInstantiationException(clazz.getName());
         } else {
             if (addObject) {
-                addObject(result);
+                result = addObject(result);
             }
             return result;
         }
     }
 
-    private <T> T getMultiArgObject(Constructor<?>[] constructors) throws ObjectPoolInstantiationException {
+    private <T> T getMultiArgObject(Constructor<?> constructor) throws ObjectPoolInstantiationException {
         try {
-            for (Constructor<?> constructor : constructors) {
-                // 獲取構造函數的參數類型
-                Class<?>[] parameterTypes = constructor.getParameterTypes();
-                // 判斷是否為多參數構造函數
-                if (parameterTypes.length > 0) {
-                    List<Object> constructorParameterObjects = getParameterTypeObjectList(parameterTypes);
-                    if (!constructorParameterObjects.isEmpty()) {
-                        return (T) constructor.newInstance(constructorParameterObjects.toArray());
+            // 獲取構造函數的參數類型
+            Type[] parameterTypes = constructor.getGenericParameterTypes();
+            List<Object> objects = new ArrayList<>();
+            Arrays.stream(parameterTypes).forEach(type -> {
+                try {
+                    int hashId = getHashId(getId(Class.forName(type.getTypeName())).getClass());
+                    if (pool.containsKey(hashId)) {
+                        objects.add(pool.get(hashId));
                     }
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e);
                 }
-            }
-        } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
+            });
+            return (T) constructor.newInstance(objects.toArray());
+        } catch (Exception e) {
             throw new ObjectPoolInstantiationException(e);
         }
-        return null;
     }
 
-    private List<Object> getParameterTypeObjectList(Class<?>[] parameterTypes) {
-        try {
-            List<Object> constructorParameterList = new ArrayList<>();
-            for (Class<?> parameterType : parameterTypes) {
-                constructorParameterList.add(getObject(parameterType));
-            }
-            return constructorParameterList;
-        } catch (Exception ex) {
-            nativeLogger.debug(ex.getClass().getName(), ex.getMessage());
-        }
-        return new ArrayList<>();
+    public <T> List<T> filterByInterface(Class<T> interfaceClass) {
+        return pool.values().stream()
+                .filter(interfaceClass::isInstance)
+                .map(interfaceClass::cast)
+                .collect(Collectors.toList());
     }
 }

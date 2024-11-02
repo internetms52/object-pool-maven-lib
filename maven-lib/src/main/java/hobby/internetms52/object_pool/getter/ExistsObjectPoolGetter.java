@@ -5,9 +5,9 @@ import hobby.internetms52.object_pool.class_info.ClassInfo;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ExistsObjectPoolGetter implements ObjectPoolGetter {
-    ConcurrentHashMap<Class<?>, Object> pool;
+    ConcurrentHashMap<Integer, Object> pool;
 
-    public ExistsObjectPoolGetter(ConcurrentHashMap<Class<?>, Object> pool) {
+    public ExistsObjectPoolGetter(ConcurrentHashMap<Integer, Object> pool) {
         this.pool = pool;
     }
 

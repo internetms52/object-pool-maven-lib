@@ -1,6 +1,6 @@
 package hobby.internetms52.object_pool.exception;
 
-public class AmbiguousConstructorException extends Exception {
+public class AmbiguousConstructorException extends RuntimeException {
     public AmbiguousConstructorException() {
     }
 

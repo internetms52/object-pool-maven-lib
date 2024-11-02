@@ -15,15 +15,7 @@ public class ClassInfo {
         return clazz;
     }
 
-    public void setClazz(Class<?> clazz) {
-        this.clazz = clazz;
-    }
-
     public Constructor<?> getAvailableConstructor() {
         return availableConstructor;
-    }
-
-    public void setAvailableConstructor(Constructor<?> availableConstructor) {
-        this.availableConstructor = availableConstructor;
     }
 }

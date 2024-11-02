@@ -5,8 +5,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class NativeLogger {
-    Logger logger;
-
+    private final Logger logger;
 
     public NativeLogger(Class<?> clazz) {
         logger = Logger.getLogger(clazz.getName());
