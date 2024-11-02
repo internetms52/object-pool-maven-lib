@@ -79,3 +79,43 @@ class Foo {
 }
 ```
 Note: The Foo class in these examples is user-defined. Replace it with your own implementation as needed.
+
+### Working with Generic Interface Type
+```java
+// String type implementation
+public class InterfaceTypeStringNested implements InterfaceTypeK<InterfaceTypeT<String>> {
+    @Override
+    public InterfaceTypeT<String> get() {
+        return new InterfaceTypeTString();
+    }
+}
+
+// Integer type implementation
+public class InterfaceTypeIntegerNested implements InterfaceTypeK<InterfaceTypeT<Integer>> {
+    @Override
+    public InterfaceTypeT<Integer> get() {
+        return new InterfaceTypeTInteger();
+    }
+}
+```
+```java
+@Nested
+class InterfaceTypeTests {
+    @Test
+    void shouldFindAllImplementationsOfInterface() {
+        // Prepare test data
+        InterfaceTypeK<InterfaceTypeT<String>> stringImpl = new InterfaceTypeStringNested();
+        InterfaceTypeK<InterfaceTypeT<Integer>> integerImpl = new InterfaceTypeIntegerNested();
+        pool.addObject(stringImpl);
+        pool.addObject(integerImpl);
+
+        // Execute test
+        List<InterfaceTypeK> result = pool.filterByInterface(InterfaceTypeK.class);
+
+        // Verify results
+        assertEquals(2, result.size());
+        assertTrue(result.contains(stringImpl));
+        assertTrue(result.contains(integerImpl));
+    }
+}
+```
