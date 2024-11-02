@@ -1,7 +1,7 @@
 #### install plugin
 mvn clean install
 #### test plugin
-``mvn com.internetms52:object-pool-maven-plugin:0.1.3:object-pool
+``mvn com.internetms52:object-pool-maven-plugin:0.2.1:object-pool
 ``
 #### deploy plugin
 ``
@@ -14,7 +14,7 @@ To use this library in your Maven project, add the following dependency to your 
 <dependency>
     <groupId>io.github.internetms52</groupId>
     <artifactId>object-pool</artifactId>
-    <version>0.1.3</version>
+    <version>0.2.1</version>
 </dependency>
 ```
 
