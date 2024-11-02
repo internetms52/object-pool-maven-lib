@@ -54,12 +54,12 @@ public class ObjectPool {
         stringBuilder.append(clazz.getName());
         if (extendedType instanceof ParameterizedType parameterizedType) {
             Type[] multiTypeArguments = parameterizedType.getActualTypeArguments();
-            Arrays.stream(multiTypeArguments).forEach(genericType -> {
+            for (Type genericType : multiTypeArguments) {
                 if (genericType instanceof TypeVariable<?>) {
                     throw new UnsupportedOperationException("class information been erased.");
                 }
                 stringBuilder.append(genericType.getClass());
-            });
+            }
         }
         return stringBuilder.toString();
     }
@@ -67,7 +67,9 @@ public class ObjectPool {
     private String getInterfaceId(Class<?> clazz) {
         StringBuilder stringBuilder = new StringBuilder();
         Type[] interfaceTypes = clazz.getGenericInterfaces();
-        Arrays.stream(interfaceTypes).forEach(stringBuilder::append);
+        for (Type type : interfaceTypes) {
+            stringBuilder.append(type);
+        }
         return stringBuilder.toString();
     }
 
