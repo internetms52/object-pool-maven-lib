@@ -64,8 +64,10 @@ public class ObjectPoolConstructorBasicFunctionTest {
             // 準備測試數據
             InterfaceTypeK<InterfaceTypeT<String>> stringImpl = new InterfaceTypeStringNested();
             InterfaceTypeK<InterfaceTypeT<Integer>> integerImpl = new InterfaceTypeIntegerNested();
+            GenericTypeObject4 genericTypeObject4 = new GenericTypeObject4();
             pool.addObject(stringImpl);
             pool.addObject(integerImpl);
+            pool.addObject(genericTypeObject4);
 
             // 執行測試
             List<InterfaceTypeK> result = pool.filterByInterface(InterfaceTypeK.class);
